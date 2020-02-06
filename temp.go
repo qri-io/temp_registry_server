@@ -6,14 +6,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/qri-io/dataset"
 	"github.com/qri-io/qri/config"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/registry"
 	"github.com/qri-io/qri/registry/regserver"
 	"github.com/qri-io/qri/remote"
 	"github.com/qri-io/qri/repo/gen"
-	reporef "github.com/qri-io/qri/repo/ref"
 )
 
 // NewTempRepoRegistry creates a temporary repo & builds a registry atop it.
@@ -24,6 +22,8 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
 	}
+	log.Infof("temp registry location: %s", RootPath)
+
 	// Create directory for new IPFS repo.
 	IPFSPath := filepath.Join(RootPath, "ipfs")
 	err = os.MkdirAll(IPFSPath, os.ModePerm)
@@ -105,25 +105,4 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 	}
 
 	return inst, reg, cleanup, nil
-}
-
-func addBasicDataset(inst *lib.Instance) {
-	dsm := lib.NewDatasetRequestsInstance(inst)
-	res := reporef.DatasetRef{}
-	err := dsm.Save(&lib.SaveParams{
-		Publish: true,
-		Ref:     "me/dataset",
-		Dataset: &dataset.Dataset{
-			Meta: &dataset.Meta{
-				Title: "I'm a dataset",
-			},
-			BodyPath: "body.csv",
-			BodyBytes: []byte(`a,b,c,true,2
-d,e,f,false,3`),
-		},
-	}, &res)
-
-	if err != nil {
-		log.Fatalf("saving dataset verion: %s", err)
-	}
 }

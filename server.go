@@ -4,6 +4,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,16 +17,21 @@ import (
 var (
 	log      = logger.Logger("regserver")
 	adminKey string
+
+	port      string
+	noCleanup bool
 )
 
+func init() {
+	flag.StringVar(&port, "port", "2500", "port to listen on. default: `2500`")
+	flag.BoolVar(&noCleanup, "no-cleanup", false, "don't remove directory on close")
+}
+
 func main() {
+	flag.Parse()
 
 	logger.SetLogLevel("regserver", "info")
 	ctx := context.Background()
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
 
 	log.Info("creating temporary registry")
 	inst, reg, cleanup, err := NewTempRepoRegistry(ctx)
@@ -33,11 +39,16 @@ func main() {
 		log.Fatalf("creating temp registry: %s", err)
 	}
 
-	addBasicDataset(inst)
+	if err := createSynthsDataset(ctx, inst); err != nil {
+		log.Fatal(err)
+	}
+
+	mux := handlers.NewRoutes(reg)
+	mux.Handle("/sim/action", SimActionHandler(inst))
 
 	s := http.Server{
 		Addr:    ":" + port,
-		Handler: handlers.NewRoutes(reg),
+		Handler: mux,
 	}
 
 	log.Infof("serving on: %s", s.Addr)
@@ -53,6 +64,9 @@ func main() {
 	<-ch
 	log.Info("Received signal, shutting down...")
 	s.Close()
-	cleanup()
+	if !noCleanup {
+		log.Infof("removing registry data")
+		cleanup()
+	}
 	log.Info("done")
 }
