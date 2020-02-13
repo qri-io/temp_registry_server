@@ -17,5 +17,5 @@ require (
 	github.com/ipfs/go-log v1.0.1
 	github.com/qri-io/apiutil v0.1.0
 	github.com/qri-io/dataset v0.1.5-0.20191126212116-72b5aa69790b
-	github.com/qri-io/qri v0.9.5-0.20200207154032-d3fbce4a0f55
+	github.com/qri-io/qri v0.9.5-0.20200212223441-2933bc4d7365
 )
