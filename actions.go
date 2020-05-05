@@ -42,7 +42,7 @@ var simActions = map[string]simActionFunc{
 type simActionFunc func(ctx context.Context, inst *lib.Instance) error
 
 func createSynthsDataset(ctx context.Context, inst *lib.Instance) error {
-	dsm := lib.NewDatasetRequestsInstance(inst)
+	dsm := lib.NewDatasetMethods(inst)
 	res := reporef.DatasetRef{}
 	err := dsm.Save(&lib.SaveParams{
 		Publish: true,
@@ -69,7 +69,7 @@ moog,subsequent 37,,,,
 }
 
 func appendSynthsDataset(ctx context.Context, inst *lib.Instance) error {
-	dsm := lib.NewDatasetRequestsInstance(inst)
+	dsm := lib.NewDatasetMethods(inst)
 	res := reporef.DatasetRef{}
 	err := dsm.Save(&lib.SaveParams{
 		Publish: true,
