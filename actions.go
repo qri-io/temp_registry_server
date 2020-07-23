@@ -8,6 +8,7 @@ import (
 
 	"github.com/qri-io/apiutil"
 	"github.com/qri-io/dataset"
+	"github.com/qri-io/qri/base"
 	"github.com/qri-io/qri/lib"
 	reporef "github.com/qri-io/qri/repo/ref"
 )
@@ -45,8 +46,7 @@ func createSynthsDataset(ctx context.Context, inst *lib.Instance) error {
 	dsm := lib.NewDatasetMethods(inst)
 	res := reporef.DatasetRef{}
 	err := dsm.Save(&lib.SaveParams{
-		Publish: true,
-		Ref:     "me/synths",
+		Ref: "me/synths",
 		Dataset: &dataset.Dataset{
 			Meta: &dataset.Meta{
 				Title:       "synthesizers",
@@ -61,19 +61,26 @@ moog,subsequent 37,,,,
 		},
 	}, &res)
 
-	if err == nil {
-		log.Infof("createSynthsDataset dataset saved: %s", res)
+	if err != nil {
+		log.Errorf("createSynthsDataset: error saving dataset: %s", res)
+		return err
 	}
 
-	return err
+	res.Published = true
+	err = base.SetPublishStatus(inst.Repo(), &res, true)
+	if err != nil {
+		log.Errorf("createSynthsDataset: error setting published status: %s", res)
+		return err
+	}
+	log.Infof("createSynthsDataset dataset saved: %s", res)
+	return nil
 }
 
 func appendSynthsDataset(ctx context.Context, inst *lib.Instance) error {
 	dsm := lib.NewDatasetMethods(inst)
 	res := reporef.DatasetRef{}
 	err := dsm.Save(&lib.SaveParams{
-		Publish: true,
-		Ref:     "me/synths",
+		Ref: "me/synths",
 		Dataset: &dataset.Dataset{
 			BodyPath: "body.csv",
 			BodyBytes: []byte(`company,name,year_of_release,initial_cost,initial_cost_adjusted
@@ -85,9 +92,17 @@ novation,bass station,,,,
 		},
 	}, &res)
 
-	if err == nil {
-		log.Infof("appendSynthsDataset saved: %s", res)
+	if err != nil {
+		log.Errorf("appendSynthsDataset: error saving dataset: %s", res)
+		return err
 	}
 
-	return err
+	res.Published = true
+	err = base.SetPublishStatus(inst.Repo(), &res, true)
+	if err != nil {
+		log.Errorf("appendSynthsDataset: error setting published status: %s", res)
+		return err
+	}
+	log.Infof("appendSynthsDataset saved: %s", res)
+	return nil
 }
