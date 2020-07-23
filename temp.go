@@ -24,15 +24,16 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 	}
 	log.Infof("temp registry location: %s", RootPath)
 
-	// Create directory for new IPFS repo.
-	IPFSPath := filepath.Join(RootPath, "ipfs")
-	err = os.MkdirAll(IPFSPath, os.ModePerm)
-	if err != nil {
-		return nil, registry.Registry{}, nil, err
-	}
 	// Create directory for new Qri repo.
 	QriPath := filepath.Join(RootPath, "qri")
 	err = os.MkdirAll(QriPath, os.ModePerm)
+	if err != nil {
+		return nil, registry.Registry{}, nil, err
+	}
+
+	// Create directory for new IPFS repo.
+	IPFSPath := filepath.Join(QriPath, "ipfs")
+	err = os.MkdirAll(IPFSPath, os.ModePerm)
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
 	}
@@ -56,8 +57,7 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 		cfg.Profile.Peername = g.GenerateNickname(cfg.P2P.PeerID)
 	}
 
-	cfg.API.Port = 99999
-	cfg.Webapp.Enabled = false
+	cfg.API.Address = "/ip4/127.0.0.1/tcp/99999"
 	cfg.RPC.Enabled = false
 	cfg.Registry.Location = ""
 	cfg.Remote = &config.Remote{
@@ -69,12 +69,10 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 	}
 
 	err = lib.Setup(lib.SetupParams{
-		IPFSFsPath:     IPFSPath,
-		QriRepoPath:    QriPath,
-		SetupIPFS:      true,
-		Config:         cfg,
-		ConfigFilepath: cfgPath,
-		Generator:      g,
+		RepoPath:  QriPath,
+		SetupIPFS: true,
+		Config:    cfg,
+		Generator: g,
 	})
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
