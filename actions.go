@@ -9,8 +9,8 @@ import (
 	"github.com/qri-io/apiutil"
 	"github.com/qri-io/dataset"
 	"github.com/qri-io/qri/base"
+	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
-	reporef "github.com/qri-io/qri/repo/ref"
 )
 
 // SimActionHandler triggers actions on this server that simulate real-world
@@ -44,7 +44,7 @@ type simActionFunc func(ctx context.Context, inst *lib.Instance) error
 
 func createSynthsDataset(ctx context.Context, inst *lib.Instance) error {
 	dsm := lib.NewDatasetMethods(inst)
-	res := reporef.DatasetRef{}
+	res := dataset.Dataset{}
 	err := dsm.Save(&lib.SaveParams{
 		Ref: "me/synths",
 		Dataset: &dataset.Dataset{
@@ -65,9 +65,14 @@ moog,subsequent 37,,,,
 		log.Errorf("createSynthsDataset: error saving dataset: %s", res)
 		return err
 	}
+	ref := dsref.Ref{
+		Username:  res.Peername,
+		Name:      res.Name,
+		ProfileID: res.ProfileID,
+		Path:      res.Path,
+	}
 
-	res.Published = true
-	err = base.SetPublishStatus(inst.Repo(), &res, true)
+	err = base.SetPublishStatus(inst.Repo(), ref, true)
 	if err != nil {
 		log.Errorf("createSynthsDataset: error setting published status: %s", res)
 		return err
@@ -78,7 +83,7 @@ moog,subsequent 37,,,,
 
 func appendSynthsDataset(ctx context.Context, inst *lib.Instance) error {
 	dsm := lib.NewDatasetMethods(inst)
-	res := reporef.DatasetRef{}
+	res := dataset.Dataset{}
 	err := dsm.Save(&lib.SaveParams{
 		Ref: "me/synths",
 		Dataset: &dataset.Dataset{
@@ -97,8 +102,14 @@ novation,bass station,,,,
 		return err
 	}
 
-	res.Published = true
-	err = base.SetPublishStatus(inst.Repo(), &res, true)
+	ref := dsref.Ref{
+		Username:  res.Peername,
+		Name:      res.Name,
+		ProfileID: res.ProfileID,
+		Path:      res.Path,
+	}
+
+	err = base.SetPublishStatus(inst.Repo(), ref, true)
 	if err != nil {
 		log.Errorf("appendSynthsDataset: error setting published status: %s", res)
 		return err

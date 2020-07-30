@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/qri-io/qri/config"
+	"github.com/qri-io/qri/dsref"
 	"github.com/qri-io/qri/lib"
 	"github.com/qri-io/qri/registry"
 	"github.com/qri-io/qri/registry/regserver"
@@ -90,8 +91,12 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
 	}
+	localResolver := dsref.SequentialResolver(
+		inst.Dscache(),
+		inst.Repo(),
+	)
 
-	rem, err := remote.NewRemote(inst.Node(), cfg.Remote)
+	rem, err := remote.NewRemote(inst.Node(), cfg.Remote, localResolver)
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
 	}

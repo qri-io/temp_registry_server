@@ -14,13 +14,8 @@ replace (
 )
 
 require (
-	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f // indirect
-	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
-	github.com/ipfs/go-ipfs-http-client v0.0.5 // indirect
 	github.com/ipfs/go-log v1.0.4
-	github.com/lucas-clemente/quic-go-certificates v0.0.0-20160823095156-d2f86524cced // indirect
 	github.com/qri-io/apiutil v0.2.0
 	github.com/qri-io/dataset v0.2.0
-	github.com/qri-io/iso8601 v0.1.0 // indirect
-	github.com/qri-io/qri v0.9.10-0.20200723222713-ed569d3ee9ec
+	github.com/qri-io/qri v0.9.10-0.20200724185821-049b08666c8b
 )
