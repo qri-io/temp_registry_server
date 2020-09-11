@@ -1089,6 +1089,10 @@ github.com/qri-io/qri v0.9.12-0.20200910190341-0cac9f772228 h1:X+Dpu+Hr53sbusM6b
 github.com/qri-io/qri v0.9.12-0.20200910190341-0cac9f772228/go.mod h1:9/+IlmUk9hNqmzqC6yAhjNWRquel/Sfc/xarnIBqKdo=
 github.com/qri-io/qri v0.9.12 h1:maKwnZkkXGk4BYUUUujJi1tqaDzEYvUcQWupf0FPiE0=
 github.com/qri-io/qri v0.9.12/go.mod h1:9/+IlmUk9hNqmzqC6yAhjNWRquel/Sfc/xarnIBqKdo=
+github.com/qri-io/qri v0.9.13-0.20200911203835-0d4b9ba63341 h1:xkEPozxTGdgbWl9+JJEUQLjtN+dy9+JtkcIWvkVH/CM=
+github.com/qri-io/qri v0.9.13-0.20200911203835-0d4b9ba63341/go.mod h1:9/+IlmUk9hNqmzqC6yAhjNWRquel/Sfc/xarnIBqKdo=
+github.com/qri-io/qri v0.9.13-0.20200911220929-2bb6de0040c1 h1:r/wVqmjhJMkcsNQLpCU8F0r5YfPvqSPh1CAVh2o8zsI=
+github.com/qri-io/qri v0.9.13-0.20200911220929-2bb6de0040c1/go.mod h1:9/+IlmUk9hNqmzqC6yAhjNWRquel/Sfc/xarnIBqKdo=
 github.com/qri-io/starlib v0.4.2 h1:ZGzmzT9fOqdluezcwhAZAbTn/v6kMg1tC6ALVjQPhpQ=
 github.com/qri-io/starlib v0.4.2/go.mod h1:2xlZ9r2UV4LF4G9mpYPBWo7CtXtdW0h1RoGIkZ8elOE=
 github.com/qri-io/varName v0.1.0 h1:dFP5qZHrxnn5fNoMbjfpMCRBYDrOsoyls7R07r+emk0=
