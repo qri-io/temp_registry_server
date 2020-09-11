@@ -18,6 +18,7 @@ var (
 	log      = logger.Logger("regserver")
 	adminKey string
 
+	logLevel  string
 	port      string
 	noCleanup bool
 )
@@ -25,6 +26,7 @@ var (
 func init() {
 	flag.StringVar(&port, "port", "2500", "port to listen on. default: `2500`")
 	flag.BoolVar(&noCleanup, "no-cleanup", false, "don't remove directory on close")
+	flag.StringVar(&logLevel, "log-level", "info", "set the remote's log level ['info', 'debug', 'warn', 'error']")
 }
 
 func main() {
@@ -34,7 +36,7 @@ func main() {
 	ctx := context.Background()
 
 	log.Info("creating temporary registry")
-	inst, reg, cleanup, err := NewTempRepoRegistry(ctx)
+	inst, reg, cleanup, err := NewTempRepoRegistry(ctx, logLevel)
 	if err != nil {
 		log.Fatalf("creating temp registry: %s", err)
 	}

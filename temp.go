@@ -18,7 +18,7 @@ import (
 // NewTempRepoRegistry creates a temporary repo & builds a registry atop it.
 // callers should always call the returned cleanup function when finished to
 // remove temp files
-func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry, func(), error) {
+func NewTempRepoRegistry(ctx context.Context, logLevel string) (*lib.Instance, registry.Registry, func(), error) {
 	RootPath, err := ioutil.TempDir("", "temp_repo_registry")
 	if err != nil {
 		return nil, registry.Registry{}, nil, err
@@ -67,6 +67,15 @@ func NewTempRepoRegistry(ctx context.Context) (*lib.Instance, registry.Registry,
 		AcceptTimeoutMs:  -1,
 		RequireAllBlocks: false,
 		AllowRemoves:     true,
+	}
+
+	cfg.Logging.Levels = map[string]string{
+		"qriapi":  logLevel,
+		"qrip2p":  logLevel,
+		"remote":  logLevel,
+		"logbook": logLevel,
+		"logsync": logLevel,
+		"repo":    logLevel,
 	}
 
 	err = lib.Setup(lib.SetupParams{
